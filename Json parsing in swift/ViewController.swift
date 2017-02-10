@@ -29,15 +29,23 @@ class ViewController: UIViewController {
             // parse json data
             if let data=data{
                 do{
-                    let jsonResult=try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                    print("shahed:\(jsonResult)")
-                    if let feed=jsonResult["feed"] as? NSDictionary{
-                        if let entry=feed["entry"] as? NSDictionary{
-                            print("entry: \(entry)");
-                            if let id=entry["id"] as? NSDictionary{
-                                print("id=\(id)");
-                            }
+                    let allFeed=try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String:AnyObject]
+                    print("shahed:\(allFeed)")
+                    // array hisebe niye index diye access korbo
+                    if let feed=allFeed["feed"]{
+                        print("count: \(feed.count)")
+                        print("inside1")
+//                        print("feed[0]:\(feed[0] as! [String:AnyObject])");
+//                        print("feed[1]:\(feed[1])");
+                        print("inside2")
+                        for index in 0...feed.count-1 {
+                          let allObject = feed[index] as! [String : AnyObject]
+                            print("allObject:\(allObject)");
                         }
+                        // kivaLoan er moto loop use kore korle complexity beshi hobe. kintu jodi shob element lage tobe KivaLoan er moto kora.
+//                        if let entry=feed[0] as? [AnyObject]{
+//                            print("entry: \(entry)")
+//                        }
                     }
                 }catch{
                     print(error);
