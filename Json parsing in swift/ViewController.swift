@@ -29,24 +29,48 @@ class ViewController: UIViewController {
             // parse json data
             if let data=data{
                 do{
-                    let allFeed=try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String:AnyObject]
-                    print("shahed:\(allFeed)")
-                    // array hisebe niye index diye access korbo
-                    if let feed=allFeed["feed"]{
-                        print("count: \(feed.count)")
-                        print("inside1")
-//                        print("feed[0]:\(feed[0] as! [String:AnyObject])");
-//                        print("feed[1]:\(feed[1])");
-                        print("inside2")
-                        for index in 0...feed.count-1 {
-                          let allObject = feed[index] as! [String : AnyObject]
-                            print("allObject:\(allObject)");
+                    let dict=try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? Dictionary<String,AnyObject>
+                    print("dict:\(dict!)");
+                    print("1st")
+                    if let feed=dict?["feed"] as? Dictionary<String,AnyObject>{
+                        print("feed:\(feed)");
+                        print("2nd");
+                        
+                        if let author=feed["author"] as? NSDictionary{
+                            if let authorName=author["name"] as? NSDictionary{
+                                if let authorNameLabel=authorName["label"] as? String{
+                                    print("label:\(authorNameLabel)");
+                                    print("3rd");
+                                }
+                            }
                         }
-                        // kivaLoan er moto loop use kore korle complexity beshi hobe. kintu jodi shob element lage tobe KivaLoan er moto kora.
-//                        if let entry=feed[0] as? [AnyObject]{
-//                            print("entry: \(entry)")
-//                        }
+                        
+                        if let entry=feed["entry"] as? [Dictionary<String,AnyObject>]{
+                            for i in 0..<entry.count{
+                                if let name=entry[i]["im:name"]{
+                                    print("\(i):\(name)");
+                                }
+                            }
+                        }
+                        
                     }
+                    //                    print(allFeed["entry"]);
+                    // array hisebe niye index diye access korbo
+                    //                    if let feed=allFeed["feed"]{
+                    //                        print("count: \(feed.count)")
+                    //                        print("inside1")
+                    ////                        print("feed[0]:\(feed[0] as! [String:AnyObject])");
+                    ////                        print("feed[1]:\(feed[1])");
+                    ////                        print("inside2")
+                    ////                        for index in 0...feed.count-1 {
+                    ////                          let allObject = feed[index] as! [String : AnyObject]
+                    ////                            print("allObject:\(allObject)");
+                    ////                        }
+                    //                        // kivaLoan er moto loop use kore korle complexity beshi hobe. kintu jodi shob element lage tobe KivaLoan er moto kora.
+                    ////                        if let entry=feed[0] as? [AnyObject]{
+                    ////                            print("entry: \(entry)")
+                    ////                        }
+                    //                    }
                 }catch{
                     print(error);
                 }
